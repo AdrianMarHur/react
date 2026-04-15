@@ -2,6 +2,9 @@ import { useState } from "react";
 import { DataTable } from "./components/DataTable";
 import type { Columna } from "./components/DataTable";
 import type { Servidor } from "./types/Servidor";
+import { diasDesde } from "./utils/fecha";
+import type { EstadoServidor } from "./types/EstadoServidor";
+import { describeEstadoServidor } from "./utils/describeEstadoServidor";
 
 const servidoresIniciales: Servidor[] = [
   {
@@ -24,7 +27,13 @@ const columnas: Columna<Servidor>[] = [
   { clave: "nombre", encabezado: "Nombre" },
   { clave: "ip", encabezado: "IP" },
   { clave: "estado", encabezado: "Estado" },
+  { clave: "creadoEn", encabezado: "Creado hace (días)" },
 ];
+
+const estadoActual: EstadoServidor = {
+  tipo: "INACTIVO",
+  motivo: "Actualización del sistema",
+};
 
 function App() {
   const [servidores] = useState<Servidor[]>(servidoresIniciales);
@@ -37,12 +46,23 @@ function App() {
   return (
     <div style={{ padding: "1rem" }}>
       <h1>Gestión de Servidores</h1>
+      <p>
+        Estado actual del sistema:{" "}
+      <strong>{describeEstadoServidor(estadoActual)}</strong>
+      </p>
 
       <DataTable
         datos={servidores}
         columnas={columnas}
         onEditar={iniciarEdicion}
       />
+      <ul>
+        {servidores.map((s) => (
+      <li key={s.id}>
+      { s.nombre} creado hace {diasDesde(s.creadoEn)} días
+      </li>
+          ))}
+      </ul>
 
       {edicion && (
         <div style={{ marginTop: "1rem" }}>

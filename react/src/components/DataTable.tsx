@@ -1,4 +1,4 @@
-//import React from "react"; // No es necesario importar React en versiones modernas de React
+//import React from "react"; // No es necesario importar React en versiones modernas de React 
 
 export interface Columna<T extends object> {
   clave: keyof T;
